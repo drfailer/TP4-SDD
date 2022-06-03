@@ -29,5 +29,6 @@ void freeTable(table_t **);
 table_t * ajoutTable(table_t *, int, int, int);
 int valeurTable(table_t *, int, int);
 void afficheTable(table_t * table);
+table_t * tableDepuisFichier(char *nomFichier);
 
 #endif

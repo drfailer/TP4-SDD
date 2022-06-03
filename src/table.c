@@ -69,6 +69,7 @@ void freeTable(table_t ** table)
   }
 }
 
+/* Recherche dichotomique dans la table maj */
 int rechercheDicho(table_t * table, int i)
 {
   int a = 0;
@@ -101,6 +102,7 @@ void decaleDroite(table_t * table, int a)
   }
 }
 
+/* Ajout d'un nouveau lien `nouv` dans `lst` (triée). */
 lien_t * ajoutListe(lien_t * lst, lien_t * nouv) {
   lien_t ** prec = &lst;
 
@@ -120,6 +122,9 @@ lien_t * ajoutListe(lien_t * lst, lien_t * nouv) {
   return lst;
 }
 
+/* Ajoute une nouvelle valeur `v` dans `table` aux coordonnées `i`,`j`.
+ * Il y a déjà un élément au coordonnées (i,i), la table n'est pas modifiée
+ */
 table_t * ajoutTable(table_t * table, int i, int j, int v)
 {
   int k = rechercheDicho(table, i);
@@ -145,6 +150,7 @@ table_t * ajoutTable(table_t * table, int i, int j, int v)
   return table;
 }
 
+/* Donne la valeur aux coordonnées (i,j) dans la table */
 int valeurTable(table_t * table, int i, int j)
 {
   couple_t * maj = table->maj;
@@ -184,6 +190,27 @@ void afficheTable(table_t * table)
       printf("[%d: %d] -> ", cour->j, cour->val);
       cour = cour->suiv;
     }
-    printf(" [ ]\n\n");
+    printf(" [ ]\n");
   }
+}
+
+/* create a table from values in a file */
+table_t * tableDepuisFichier(char *nomFichier)
+{
+  FILE * f = fopen(nomFichier, "r");
+  table_t * nouv = NULL;
+  char buff[500];
+  int i, j, v;
+
+  if (f) {
+    nouv = creerTable();
+    if (nouv) {
+      while (fgets(buff, 500, f)) {
+	sscanf(buff, "%d %d %d", &i, &j, &v);
+	nouv = ajoutTable(nouv, i, j, v);
+      }
+    }
+    fclose(f);
+  }
+  return nouv;
 }
